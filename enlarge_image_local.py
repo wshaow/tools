@@ -15,6 +15,7 @@ INTER_METHOD = cv.INTER_LINEAR  # 默认使用最近邻, 双三次INTER_CUBIC, I
 
 point1 = (-1, -1)
 point2 = (-1, -1)
+G_RECT = []
 global img, g_rect  # g_rect是选择的感兴趣的区域[min_x, min_y, width, height]
 
 
@@ -24,7 +25,7 @@ def read_image(path):
 
 
 def draw_circle(event, x, y, flags, param):
-    global point1, img, g_rect
+    global point1, img, G_RECT
     img2 = img.copy()  # 这里必须要拷贝一个新的
     if event == cv.EVENT_LBUTTONDOWN:  # 获取左上角的坐标
         point1 = x, y
@@ -44,8 +45,8 @@ def draw_circle(event, x, y, flags, param):
             min_y = min(point1[1], point2[1])
             width = abs(point1[0] - point2[0])
             height = abs(point1[1] - point2[1])
-            g_rect = [min_x, min_y, width, height]
-            print("g_rect: ", g_rect)
+            G_RECT = [min_x, min_y, width, height]
+            print("g_rect: ", G_RECT)
             cv.rectangle(img2, point1, point2, LINE_COLOR, LINE_WIDTH)
 
         cv.imshow('ori_image', img2)
@@ -53,13 +54,19 @@ def draw_circle(event, x, y, flags, param):
 
 def get_ROI():
     global img
-    cv.namedWindow('ori_image')
+    scaled_image = []
     while True:
+        cv.namedWindow('ori_image')
         cv.setMouseCallback('ori_image', draw_circle)
         cv.imshow('ori_image', img)
-        k = cv.waitKey(0) & 0xFF
-        if k == 13 or k == 32:  # 空格或者回车键退出
+        k = cv.waitKey(0)
+        if k == 32:  # 空格键化出对比图
+            scaled_image = get_compair_imgs(imgs)
+            plot_compair_imgs(scaled_image, img_names)
+        if k == 13:  # 回车键退出
             break
+
+    return scaled_image
 
 
 def scale_image(img, scale, inter_mathod):
@@ -75,7 +82,7 @@ def add_borders(img):
 
 
 def get_scale_image(img):
-    roi_img = img[g_rect[1]:g_rect[1] + g_rect[3], g_rect[0]:g_rect[0] + g_rect[2]]  # 提取选择的区域
+    roi_img = img[G_RECT[1]:G_RECT[1] + G_RECT[3], G_RECT[0]:G_RECT[0] + G_RECT[2]]  # 提取选择的区域
     scaled_image = scale_image(roi_img, SCALE, INTER_METHOD)  # 对选择的区域放大
     add_borders_img = add_borders(scaled_image)  # 增加边框
     return add_borders_img
@@ -99,7 +106,10 @@ def read_imgs(path):
 def get_compair_imgs(imgs):
     compair_imgs = []
     for img in imgs:
-        compair_imgs.append(get_scale_image(img))
+        if ADD_BBOX:
+            compair_imgs.append(get_scale_image(img))
+        else:
+            compair_imgs.append(img)
     return compair_imgs
 
 
@@ -128,7 +138,7 @@ def save_big_image(images, image_names):
     if not os.path.exists(".\\result\\big_image\\"):
         os.makedirs(".\\result\\big_image\\")
     for i in range(len(images)):
-        cv.rectangle(images[i], (g_rect[0], g_rect[1]), (g_rect[0] + g_rect[2], g_rect[1] + g_rect[3]), LINE_COLOR, LINE_WIDTH)
+        cv.rectangle(images[i], (G_RECT[0], G_RECT[1]), (G_RECT[0] + G_RECT[2], G_RECT[1] + G_RECT[3]), LINE_COLOR, LINE_WIDTH)
         cv.imwrite(".\\result\\big_image\\" + image_names[i] + ".bmp", imgs[i])
 
 
@@ -147,10 +157,8 @@ if __name__ == '__main__':
     path = ".\\imgs"
     imgs, img_names = read_imgs(path)
 
-    get_ROI()
-    scaled_image = get_compair_imgs(imgs)
-    plot_compair_imgs(scaled_image, img_names)
+    scaled_image = get_ROI()
+
     save_scale_image(scaled_image, img_names)
     save_big_image(imgs, img_names)
-    k = cv.waitKey(0)
     cv.destroyAllWindows()
