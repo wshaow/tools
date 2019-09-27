@@ -43,5 +43,20 @@ INTER_METHOD = cv.INTER_LINEAR  # 放大图像的差值方式，默认使用线�
 
 在result中保存了最后一次选择的局部放大图
 
+#### 运行结果展示
 
+1）选择要放大的区域：
 
+![](images/step_select.png)
+
+2）选好后按空格键画出对比图（默认使用双三次插值放大四倍）
+
+![](images/step_compair.png)
+
+如果不满意可以重新选择，重新作对比图。
+
+3）如果确定后，按回车键保存最后一次选择的结果，并退出.结果保存在result文件夹下
+
+![](\images\step_save_big.png)
+
+![](images/step_save_scaled.png)
