@@ -57,6 +57,6 @@ INTER_METHOD = cv.INTER_LINEAR  # 放大图像的差值方式，默认使用线�
 
 3）如果确定后，按回车键保存最后一次选择的结果，并退出.结果保存在result文件夹下
 
-![](\images\step_save_big.png)
+![](images/step_save_big.png)
 
 ![](images/step_save_scaled.png)
