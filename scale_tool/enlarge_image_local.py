@@ -1,5 +1,9 @@
 # -*- coding:utf-8 -*-
-
+"""
+A local image scale tool
+Licensed under The MIT License
+Writen by Shaowu Wu, 20190926
+"""
 import cv2.cv2 as cv
 import numpy as np
 import os
