@@ -60,3 +60,8 @@ INTER_METHOD = cv.INTER_LINEAR  # 放大图像的差值方式，默认使用线�
 ![](images/step_save_big.png)
 
 ![](images/step_save_scaled.png)
+
+更多关于编程和机器学习资料请关注FlyAI公众号。
+![公众号二维码][1]
+
+[1]: http://wshaow.club/wechat/%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7%E4%BA%8C%E7%BB%B4%E7%A0%81.jpg
