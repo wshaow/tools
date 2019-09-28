@@ -145,6 +145,10 @@ def save_big_image(images, image_names):
         cv.rectangle(images[i], (G_RECT[0], G_RECT[1]), (G_RECT[0] + G_RECT[2], G_RECT[1] + G_RECT[3]), LINE_COLOR, LINE_WIDTH)
         cv.imwrite(".\\result\\big_image\\" + image_names[i] + ".bmp", imgs[i])
 
+    cv.rectangle(img, (G_RECT[0], G_RECT[1]), (G_RECT[0] + G_RECT[2], G_RECT[1] + G_RECT[3]), LINE_COLOR,
+                 LINE_WIDTH)
+    cv.imwrite(".\\result\\big_image\\" + "ori.bmp", img)
+
 
 if __name__ == '__main__':
 
